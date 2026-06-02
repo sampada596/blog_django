@@ -1,0 +1,27 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow-sm mt-5">
+            <div class="card-body p-4">
+                <h3 class="mb-4 text-center">Login</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label"><strong>{{ field.label }}</strong></label>
+                            <input type="{{ field.field.widget.input_type }}"
+                                   name="{{ field.html_name }}"
+                                   class="form-control"
+                                   placeholder="{{ field.label }}">
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100 mt-2">Login</button>
+                </form>
+                <p class="mt-3 text-center">Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
