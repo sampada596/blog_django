@@ -1,23 +1,40 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
+
+<!-- Introduction Section -->
+<div class="text-center py-5 mb-4" style="border-bottom: 1px solid #e0d5c5;">
+    <h1 class="display-5" style="font-style: italic;">Welcome to MyBlog</h1>
+    <p class="col-md-6 mx-auto mt-3" style="color: #9a7e6a; font-size: 1.05rem;">
+        A quiet corner of the internet for stories, thoughts, and ideas worth sharing.
+    </p>
+    {% if not request.user.is_authenticated %}
+        <a href="{% url 'register' %}" class="btn btn-primary me-2 mt-2">Get Started</a>
+        <a href="{% url 'login' %}" class="btn btn-secondary mt-2">Login</a>
+    {% else %}
+        <a href="{% url 'post_create' %}" class="btn btn-primary mt-2">+ Write a Post</a>
+    {% endif %}
+</div>
+
+<!-- Blog Posts -->
 <div class="row">
-    <div class="col-md-8 offset-md-2">
-        <h2 class="mb-4">All Blog Posts</h2>
+    <div class="col-md-7 offset-md-2">
+        <h5 class="mb-4" style="color: #8B6343; letter-spacing: 2px; font-size: 0.85rem; text-transform: uppercase;">Latest Posts</h5>
         {% for post in posts %}
-            <div class="card mb-3 shadow-sm">
+            <div class="card mb-4 p-3">
                 <div class="card-body">
                     <h4 class="card-title">{{ post.title }}</h4>
                     <p class="text-muted mb-2">
-                        <small>By <strong>{{ post.author }}</strong> | {{ post.created_at|date:"d M Y" }}</small>
+                        <small>By <strong>{{ post.author }}</strong> · {{ post.created_at|date:"d M Y" }}</small>
                     </p>
-                    <p class="card-text">{{ post.content|truncatewords:20 }}</p>
-                    <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary btn-sm">Read More</a>
+                    <p class="card-text" style="color: #6a5040;">{{ post.content|truncatewords:25 }}</p>
+                    <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary btn-sm">Read More →</a>
                 </div>
             </div>
         {% empty %}
-            <div class="alert alert-info">No posts available yet.</div>
+            <div class="alert alert-info">No posts yet. Be the first to write one!</div>
         {% endfor %}
     </div>
 </div>
+
 {% endblock %}
