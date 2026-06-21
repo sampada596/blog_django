@@ -1,11 +1,10 @@
-from django.shortcuts import render , get_object_or_404
-from .models import Post
+from django.shortcuts import render , get_object_or_404, redirect
+from .models import Post, Comment
 from django.contrib.auth import login , logout , authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegisterForm 
-from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm , PostForm
+from .forms import RegisterForm , PostForm , CommentForm
 
 def home(request):
     posts = Post.objects.filter(is_published=True).order_by('-created_at')
@@ -13,7 +12,26 @@ def home(request):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
+    comments = post.comments.all().order_by('-created_at')
+
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect('login')
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect('post_detail', pk=pk)
+    else:
+        form = CommentForm()
+    
+    return render(request, 'blog/post_detail.html', {
+        'post': post,
+        'comments': comments,
+        'form': form,
+    })
 
 def register(request):
     if request.method == 'POST':
@@ -77,4 +95,13 @@ def post_delete(request, pk):
         post.delete()
         return redirect('home')
     return render(request, 'blog/post_confirm_delete.html', {'post': post})
+
+@login_required
+def comment_delete(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if request.user != comment.author:
+        return redirect('home')
+    post_pk = comment.post.pk
+    comment.delete()
+    return redirect('post_detail',pk=post_pk)
     

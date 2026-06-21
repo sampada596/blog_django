@@ -19,6 +19,44 @@
                 {% endif %}
             </div>
         </div>
+        <div class="mt-4">
+            <h5 class="mb-3" style="color: #8B6343; letter-spacing: 1px; font-size: 0.85rem; text-transform: uppercase;">
+                Comments ({{ comments.count }})
+            </h5>
+
+            {% if request.user.is_authenticated %}
+                <div class="card p-3 mb-3">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.body }}
+                        <button type="submit" class="btn btn-primary btn-sm mt-2">Post Comment</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <a href="{% url 'login' %}">Login</a> to add a comment.
+                </div>
+            {% endif %}
+
+            {% for comment in comments %}
+    <div class="card p-3 mb-2">
+        <div class="d-flex justify-content-between">
+            <p class="mb-1"><strong>{{ comment.author }}</strong>
+                <small class="text-muted">· {{ comment.created_at|date:"d M Y, h:i A" }}</small>
+            </p>
+            {% if request.user == comment.author %}
+                <form method="POST" action="{% url 'comment_delete' comment.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm" style="color: #c47a6a; background: none; border: none;">✕</button>
+                </form>
+            {% endif %}
+        </div>
+        <p class="mb-0">{{ comment.body }}</p>
+    </div>
+{% empty %}
+    <p class="text-muted">No comments yet. Be the first to comment!</p>
+{% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}
