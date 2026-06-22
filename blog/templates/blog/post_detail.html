@@ -17,6 +17,18 @@
                     <a href="{% url 'post_edit' post.pk %}" class="btn btn-warning btn-sm ms-2">Edit</a>
                     <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm ms-2">Delete</a>
                 {% endif %}
+                <form method="POST" action="{% url 'post_like' post.pk %}" class="d-inline">
+                    {% csrf_token %}
+                    {% if request.user in post.likes.all %}
+                        <button type="submit" class="btn btn-sm ms-2" style="background: none; border: 1px solid #c47a6a; color: #c47a6a;">
+                             ♥ {{ post.total_likes }}
+                        </button>
+                    {% else %}
+                        <button type="submit" class="btn btn-sm ms-2" style="background: none; border: 1px solid #9a7e6a; color: #9a7e6a;">
+                            ♡ {{ post.total_likes }}
+                        </button>
+                    {% endif %}
+                </form>
             </div>
         </div>
         <div class="mt-4">

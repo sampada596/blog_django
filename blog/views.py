@@ -4,7 +4,8 @@ from django.contrib.auth import login , logout , authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegisterForm 
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm , PostForm , CommentForm
+from .forms import RegisterForm , PostForm , CommentForm 
+from django.db.models import Q
 
 def home(request):
     posts = Post.objects.filter(is_published=True).order_by('-created_at')
@@ -104,4 +105,21 @@ def comment_delete(request, pk):
     post_pk = comment.post.pk
     comment.delete()
     return redirect('post_detail',pk=post_pk)
+
+def search(request):
+    query = request.GET.get('q', '')
+    posts = Post.objects.filter(
+        Q(title__icontains=query) | Q(content__icontains=query),
+        is_published=True
+    ).order_by('-created_at') if query else []
+    return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
+
+@login_required
+def post_like(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.user in post.likes.all():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+    return redirect('post_detail', pk=pk)
     
