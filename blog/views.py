@@ -122,4 +122,13 @@ def post_like(request, pk):
     else:
         post.likes.add(request.user)
     return redirect('post_detail', pk=pk)
+
+@login_required
+def dashboard(request):
+    user_posts = Post.objects.filter(author=request.user).order_by('-created_at')
+    return render(request, 'blog/dashboard.html', {
+        'user_posts': user_posts,
+        
+    })
+
     
