@@ -1,11 +1,17 @@
 {% extends 'blog/base.html' %}
+{% load static %}
 
 {% block content %}
 
-<!-- Introduction Section -->
-<div class="text-center py-5 mb-4" style="border-bottom: 1px solid #e0d5c5;">
+
+<div class="text-center py-5 mb-4" style="
+    background-image: linear-gradient(rgba(250, 246, 241, 0.6), rgba(250, 246, 241, 0.6)), url('{% static 'images/bannerrr.jpg' %}');
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+">
     <h1 class="display-5" style="font-style: italic;">Welcome to Brewedwords</h1>
-    <p class="col-md-6 mx-auto mt-3" style="color: #9a7e6a; font-size: 1.05rem;">
+    <p class="col-md-6 mx-auto mt-3" style="color: #8d6343; font-size: 1.05rem;">
         A quiet corner of the internet for stories, thoughts, and ideas worth sharing.
     </p>
     {% if not request.user.is_authenticated %}
@@ -16,10 +22,10 @@
     {% endif %}
 </div>
 
-<!-- Blog Posts -->
+
 <div class="row">
     <div class="col-md-7 offset-md-2">
-        <h5 class="mb-4" style="color: #8B6343; letter-spacing: 2px; font-size: 0.85rem; text-transform: uppercase;">Latest Posts</h5>
+        <h5 class="mb-4" style="color: #5e2e06; letter-spacing: 2px; font-size: 0.85rem; text-transform: uppercase;">Latest Posts</h5>
         {% for post in posts %}
             <div class="card mb-4 p-3">
                 <div class="card-body">
@@ -30,7 +36,6 @@
                     <p class="card-text" style="color: #6a5040;">{{ post.content|truncatewords:25 }}</p>
                     <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary btn-sm">Read More →</a>
                     <span class="text-muted ms-2"><small>♥ {{ post.total_likes }}</small></span>
-
                 </div>
             </div>
         {% empty %}
