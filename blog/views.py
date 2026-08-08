@@ -8,8 +8,18 @@ from .forms import RegisterForm , PostForm , CommentForm
 from django.db.models import Q
 
 def home(request):
+    from django.contrib.auth.models import User
+    from .models import Comment
     posts = Post.objects.filter(status='published').order_by('-created_at')
-    return render(request, 'blog/home.html', {'posts': posts})
+    total_posts = posts.count()
+    total_authors = User.objects.filter(post__status='published').distinct().count()
+    total_comments = Comment.objects.count()
+    return render(request, 'blog/home.html', {
+        'posts': posts,
+        'total_posts': total_posts,
+        'total_authors': total_authors,
+        'total_comments': total_comments,
+    })
 
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
@@ -106,7 +116,8 @@ def comment_delete(request, pk):
         return redirect('home')
     post_pk = comment.post.pk
     comment.delete()
-    return redirect('post_detail',pk=post_pk)
+    post = get_object_or_404(Post, pk=post_pk)
+    return redirect('post_detail', slug=post.slug)
 
 def search(request):
     query = request.GET.get('q', '')

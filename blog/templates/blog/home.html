@@ -3,6 +3,18 @@
 
 {% block content %}
 
+<!-- Reading Progress Bar -->
+<div id="progressBar" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(to right, #8B6343, #c4a882);
+    z-index: 9999;
+    transition: width 0.1s ease;
+"></div>
+
 <!-- Hero Section -->
 <div class="hero-section text-center py-5 mb-4" style="
     background-image: linear-gradient(rgba(250, 246, 241, 0.6), rgba(250, 246, 241, 0.6)), url('{% static 'images/bannerrr.jpg' %}');
@@ -11,13 +23,31 @@
     border-radius: 12px;
 ">
     <p class="hero-subtitle">Welcome to</p>
-    <h1 class="hero-title display-5">Brewedwords</h1>
-    <p class="hero-tagline col-md-6 mx-auto mt-3">
+
+    <h1 class="hero-title">
+        <span style="
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-style: italic;
+            font-weight: 600;
+            color: #3d2b1f;
+            text-shadow: 2px 2px 8px rgba(139, 99, 67, 0.2);
+            display: block;
+        ">Brewedwords</span>
+    </h1>
+
+    <div class="hero-divider">
+        <span style="color: #c4a882; font-size: 1.2rem; letter-spacing: 8px;">— ✦ —</span>
+    </div>
+
+    <p class="hero-tagline">
         Stories brewed with thought, creativity, and curiosity.
     </p>
-    <p class="hero-description col-md-6 mx-auto">
+
+    <p class="hero-description">
         A quiet corner of the internet for stories, thoughts, and ideas worth sharing.
     </p>
+
     {% if not request.user.is_authenticated %}
         <div class="hero-buttons">
             <a href="{% url 'register' %}" class="btn btn-primary me-2 mt-2">Get Started</a>
@@ -28,6 +58,15 @@
             <a href="{% url 'post_create' %}" class="btn btn-primary mt-2">+ Write a Post</a>
         </div>
     {% endif %}
+
+    <!-- Stats Bar -->
+    <div class="hero-stats mt-4">
+        <span class="stat-item">✍️ {{ total_posts }} Posts</span>
+        <span class="stat-divider">·</span>
+        <span class="stat-item">👥 {{ total_authors }} Writers</span>
+        <span class="stat-divider">·</span>
+        <span class="stat-item">💬 {{ total_comments }} Comments</span>
+    </div>
 
     <!-- Bouncing scroll arrow -->
     <div class="scroll-arrow mt-4">
@@ -67,7 +106,7 @@
     </div>
 </div>
 
-<!-- Hero Animations -->
+<!-- Styles and Scripts -->
 <style>
 .hero-section {
     position: relative;
@@ -99,8 +138,8 @@
 }
 
 .hero-subtitle {
-    font-size: 0.9rem;
-    letter-spacing: 3px;
+    font-size: 0.85rem;
+    letter-spacing: 4px;
     text-transform: uppercase;
     color: #9a7e6a;
     opacity: 0;
@@ -108,11 +147,14 @@
 }
 
 .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    color: #3d2b1f;
     opacity: 0;
     animation: fadeSlideUp 0.8s ease forwards 0.5s;
+}
+
+.hero-divider {
+    opacity: 0;
+    animation: fadeSlideUp 0.8s ease forwards 0.7s;
+    margin: 10px 0;
 }
 
 .hero-tagline {
@@ -120,19 +162,37 @@
     color: #7a4f35;
     font-style: italic;
     opacity: 0;
-    animation: fadeSlideUp 0.8s ease forwards 0.8s;
+    animation: fadeSlideUp 0.8s ease forwards 0.9s;
 }
 
 .hero-description {
     font-size: 0.95rem;
     color: #9a7e6a;
+    max-width: 500px;
+    margin: 0 auto 1rem;
     opacity: 0;
-    animation: fadeSlideUp 0.8s ease forwards 1s;
+    animation: fadeSlideUp 0.8s ease forwards 1.1s;
 }
 
 .hero-buttons {
     opacity: 0;
-    animation: fadeSlideUp 0.8s ease forwards 1.2s;
+    animation: fadeSlideUp 0.8s ease forwards 1.3s;
+}
+
+.hero-stats {
+    opacity: 0;
+    animation: fadeSlideUp 0.8s ease forwards 1.5s;
+    font-size: 0.85rem;
+    color: #9a7e6a;
+}
+
+.stat-item {
+    display: inline-block;
+    margin: 0 8px;
+}
+
+.stat-divider {
+    color: #c4a882;
 }
 
 @keyframes fadeSlideUp {
@@ -152,7 +212,6 @@
     50% { transform: translateY(10px); }
 }
 
-
 .card {
     opacity: 1 !important;
     transform: none !important;
@@ -160,10 +219,42 @@
 }
 
 @media (max-width: 768px) {
-    .hero-title { font-size: 2.2rem; }
+    .hero-title span { font-size: 2.5rem !important; }
     .hero-tagline { font-size: 0.95rem; }
     .hero-description { font-size: 0.85rem; }
+    .stat-item { display: block; margin: 4px 0; }
+    .stat-divider { display: none; }
+}
+
+/* Dark mode hero */
+body.dark-mode .hero-section {
+    background-image: linear-gradient(rgba(26, 20, 16, 0.7), rgba(26, 20, 16, 0.7)) !important;
+}
+
+body.dark-mode .hero-title span {
+    color: #e8d5c0 !important;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .hero-tagline {
+    color: #c4a882;
+}
+
+body.dark-mode .hero-subtitle,
+body.dark-mode .hero-description,
+body.dark-mode .hero-stats {
+    color: #a08070;
 }
 </style>
+
+<script>
+    // Reading progress bar
+    window.addEventListener('scroll', function() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+    });
+</script>
 
 {% endblock %}
