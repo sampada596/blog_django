@@ -283,6 +283,10 @@
             border-color: #c4a882;
             color: #c4a882;
         }
+        body.dark-mode footer {
+            background-color: #1f1610 !important;
+            border-top-color: #3d2b1f !important;
+        }
     </style>
 </head>
 <body>
@@ -312,6 +316,9 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'categories' %}">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about' %}">About</a>
                 </li>
             </ul>
 
@@ -369,8 +376,68 @@
     {% endblock %}
 </div>
 
-<footer>
-    <p>Made with ♥ · Brewedwords © 2026</p>
+<footer style="background-color: #f2ebe3; border-top: 1px solid #e0d5c5; margin-top: 60px; padding: 40px 0 20px;">
+    <div class="container">
+        <div class="row mb-4">
+
+            <!-- Brand -->
+            <div class="col-md-4 mb-4">
+                <h5 style="font-family: 'Playfair Display', serif; font-style: italic; color: #7a4f35; font-size: 1.5rem;">✦ Brewedwords</h5>
+                <p style="font-size: 0.85rem; color: #9a7e6a; line-height: 1.7; margin-top: 8px;">
+                    Brewed with thought, creativity, and curiosity.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-md-2 mb-4">
+                <h6 style="color: #7a4f35; letter-spacing: 1px; text-transform: uppercase; font-size: 0.78rem; margin-bottom: 12px;">Navigate</h6>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li class="mb-2"><a href="{% url 'home' %}" style="color: #9a7e6a; text-decoration: none; font-size: 0.85rem;">Home</a></li>
+                    <li class="mb-2"><a href="{% url 'categories' %}" style="color: #9a7e6a; text-decoration: none; font-size: 0.85rem;">Categories</a></li>
+                    <li class="mb-2"><a href="{% url 'about' %}" style="color: #9a7e6a; text-decoration: none; font-size: 0.85rem;">About</a></li>
+                    {% if request.user.is_authenticated %}
+                        <li class="mb-2"><a href="{% url 'post_create' %}" style="color: #9a7e6a; text-decoration: none; font-size: 0.85rem;">Write a Post</a></li>
+                        <li class="mb-2"><a href="{% url 'dashboard' %}" style="color: #9a7e6a; text-decoration: none; font-size: 0.85rem;">My Posts</a></li>
+                    {% else %}
+                        <li class="mb-2"><a href="{% url 'register' %}" style="color: #9a7e6a; text-decoration: none; font-size: 0.85rem;">Join Us</a></li>
+                        <li class="mb-2"><a href="{% url 'login' %}" style="color: #9a7e6a; text-decoration: none; font-size: 0.85rem;">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Explore -->
+            <div class="col-md-2 mb-4">
+                <h6 style="color: #7a4f35; letter-spacing: 1px; text-transform: uppercase; font-size: 0.78rem; margin-bottom: 12px;">Explore</h6>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li class="mb-2"><a href="{% url 'home' %}" style="color: #9a7e6a; text-decoration: none; font-size: 0.85rem;">Latest Posts</a></li>
+                    <li class="mb-2"><a href="{% url 'categories' %}" style="color: #9a7e6a; text-decoration: none; font-size: 0.85rem;">Browse Topics</a></li>
+                    <li class="mb-2"><a href="{% url 'search' %}?q=" style="color: #9a7e6a; text-decoration: none; font-size: 0.85rem;">Search</a></li>
+                </ul>
+            </div>
+
+            <!-- Quote -->
+            <div class="col-md-4 mb-4">
+                <h6 style="color: #7a4f35; letter-spacing: 1px; text-transform: uppercase; font-size: 0.78rem; margin-bottom: 12px;">A thought</h6>
+                <p style="font-family: 'Playfair Display', serif; font-style: italic; color: #9a7e6a; font-size: 0.9rem; line-height: 1.7; border-left: 2px solid #c4a882; padding-left: 12px;">
+                    "Fill your paper with the breathings of your heart."
+                </p>
+                <small style="color: #b8a090; font-size: 0.78rem;">— William Wordsworth</small>
+            </div>
+
+        </div>
+
+        <!-- Divider -->
+        <hr style="border-color: #e0d5c5; margin: 0 0 16px;">
+
+        <!-- Bottom bar -->
+        <div class="text-center">
+            <p style="color: #b8a090; font-size: 0.8rem; margin: 0;">
+                Made with ♥ · Brewedwords © 2026
+            </p>
+</div>
+            
+        </div>
+    </div>
 </footer>
 
 <!-- Back to top button -->

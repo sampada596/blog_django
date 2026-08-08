@@ -17,4 +17,5 @@ urlpatterns = [
     path('categories/', views.categories_list, name='categories'),
     path('category/<slug:slug>/', views.category_detail, name='category_detail'),
     path('author/<str:username>/', views.author_profile, name='author_profile'),
+    path('about/', views.about, name='about'),
 ]

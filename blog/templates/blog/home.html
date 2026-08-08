@@ -76,9 +76,11 @@
     </div>
 </div>
 
-<!-- Latest Posts -->
-<div id="latest-posts" class="row">
-    <div class="col-md-7 offset-md-2">
+<!-- Main Content + Sidebar -->
+<div id="latest-posts" class="row mt-4">
+
+    <!-- Posts (left/main) -->
+    <div class="col-md-7 offset-md-1">
         <h5 class="mb-4" style="color: #5e2e06; letter-spacing: 2px; font-size: 0.85rem; text-transform: uppercase;">Latest Posts</h5>
         {% for post in posts %}
             <div class="card mb-4 p-3">
@@ -104,9 +106,72 @@
             <div class="alert alert-info">No posts yet. Be the first to write one!</div>
         {% endfor %}
     </div>
+
+    <!-- Sidebar (right) -->
+    <div class="col-md-3">
+
+        <!-- About Widget -->
+        <div class="card p-3 mb-4">
+            <h6 style="color: #7a4f35; letter-spacing: 1px; text-transform: uppercase; font-size: 0.8rem; border-bottom: 1px solid #e0d5c5; padding-bottom: 8px; margin-bottom: 12px;">About</h6>
+            <p style="font-size: 0.85rem; color: #9a7e6a; line-height: 1.7;">A quiet corner of the internet for stories, thoughts, and ideas worth sharing.</p>
+            <a href="{% url 'about' %}" class="btn btn-secondary btn-sm w-100">Learn More</a>
+        </div>
+
+        <!-- Popular Posts Widget -->
+        <div class="card p-3 mb-4">
+            <h6 style="color: #7a4f35; letter-spacing: 1px; text-transform: uppercase; font-size: 0.8rem; border-bottom: 1px solid #e0d5c5; padding-bottom: 8px; margin-bottom: 12px;">Popular Posts</h6>
+            {% for post in popular_posts %}
+                <div class="mb-3">
+                    <a href="{% url 'post_detail' post.slug %}" style="color: #3d2b1f; text-decoration: none; font-size: 0.9rem; font-weight: 500; line-height: 1.4; display: block;">{{ post.title }}</a>
+                    <small class="text-muted">{{ post.views }} views · {{ post.reading_time }} min read</small>
+                    {% if not forloop.last %}<hr style="margin: 10px 0;">{% endif %}
+                </div>
+            {% empty %}
+                <p style="font-size: 0.85rem; color: #9a7e6a;">No posts yet.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Recent Posts Widget -->
+        <div class="card p-3 mb-4">
+            <h6 style="color: #7a4f35; letter-spacing: 1px; text-transform: uppercase; font-size: 0.8rem; border-bottom: 1px solid #e0d5c5; padding-bottom: 8px; margin-bottom: 12px;">Recent Posts</h6>
+            {% for post in recent_posts %}
+                <div class="mb-3">
+                    <a href="{% url 'post_detail' post.slug %}" style="color: #3d2b1f; text-decoration: none; font-size: 0.9rem; font-weight: 500; line-height: 1.4; display: block;">{{ post.title }}</a>
+                    <small class="text-muted">{{ post.created_at|date:"d M Y" }}</small>
+                    {% if not forloop.last %}<hr style="margin: 10px 0;">{% endif %}
+                </div>
+            {% empty %}
+                <p style="font-size: 0.85rem; color: #9a7e6a;">No posts yet.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Categories Widget -->
+        <div class="card p-3 mb-4">
+            <h6 style="color: #7a4f35; letter-spacing: 1px; text-transform: uppercase; font-size: 0.8rem; border-bottom: 1px solid #e0d5c5; padding-bottom: 8px; margin-bottom: 12px;">Categories</h6>
+            {% for item in sidebar_categories %}
+                <div class="d-flex justify-content-between mb-2">
+                    <a href="{% url 'category_detail' item.category.slug %}" style="color: #6a5040; text-decoration: none; font-size: 0.88rem;">{{ item.category.name }}</a>
+                    <span class="badge" style="background-color: #e0d5c5; color: #7a4f35; font-size: 0.75rem;">{{ item.count }}</span>
+                </div>
+            {% empty %}
+                <p style="font-size: 0.85rem; color: #9a7e6a;">No categories yet.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Tags Widget -->
+        <div class="card p-3 mb-4">
+            <h6 style="color: #7a4f35; letter-spacing: 1px; text-transform: uppercase; font-size: 0.8rem; border-bottom: 1px solid #e0d5c5; padding-bottom: 8px; margin-bottom: 12px;">Tags</h6>
+            {% for tag in all_tags %}
+                <a href="#" class="badge me-1 mb-1" style="background-color: #f5efe6; color: #7a4f35; text-decoration: none; font-size: 0.78rem; padding: 5px 10px; border: 1px solid #e0d5c5;">{{ tag.name }}</a>
+            {% empty %}
+                <p style="font-size: 0.85rem; color: #9a7e6a;">No tags yet.</p>
+            {% endfor %}
+        </div>
+
+    </div>
 </div>
 
-<!-- Styles and Scripts -->
+<!-- Styles -->
 <style>
 .hero-section {
     position: relative;
@@ -224,9 +289,9 @@
     .hero-description { font-size: 0.85rem; }
     .stat-item { display: block; margin: 4px 0; }
     .stat-divider { display: none; }
+    .col-md-3 { margin-top: 2rem; }
 }
 
-/* Dark mode hero */
 body.dark-mode .hero-section {
     background-image: linear-gradient(rgba(26, 20, 16, 0.7), rgba(26, 20, 16, 0.7)) !important;
 }
@@ -236,19 +301,14 @@ body.dark-mode .hero-title span {
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4) !important;
 }
 
-body.dark-mode .hero-tagline {
-    color: #c4a882;
-}
+body.dark-mode .hero-tagline { color: #c4a882; }
 
 body.dark-mode .hero-subtitle,
 body.dark-mode .hero-description,
-body.dark-mode .hero-stats {
-    color: #a08070;
-}
+body.dark-mode .hero-stats { color: #a08070; }
 </style>
 
 <script>
-    // Reading progress bar
     window.addEventListener('scroll', function() {
         const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;

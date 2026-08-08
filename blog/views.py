@@ -1,5 +1,5 @@
 from django.shortcuts import render , get_object_or_404, redirect
-from .models import Post, Comment, Category
+from .models import Post, Comment, Category, Tag
 from django.contrib.auth import login , logout , authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegisterForm 
@@ -9,16 +9,28 @@ from django.db.models import Q
 
 def home(request):
     from django.contrib.auth.models import User
-    from .models import Comment
+    from .models import Comment, Tag
     posts = Post.objects.filter(status='published').order_by('-created_at')
     total_posts = posts.count()
     total_authors = User.objects.filter(post__status='published').distinct().count()
     total_comments = Comment.objects.count()
+    popular_posts = Post.objects.filter(status='published').order_by('-views')[:4]
+    recent_posts = Post.objects.filter(status='published').order_by('-created_at')[:4]
+    all_tags = Tag.objects.all()
+    categories = Category.objects.all()
+    sidebar_categories = []
+    for category in categories:
+        count = Post.objects.filter(category=category, status='published').count()
+        sidebar_categories.append({'category': category, 'count': count})
     return render(request, 'blog/home.html', {
         'posts': posts,
         'total_posts': total_posts,
         'total_authors': total_authors,
         'total_comments': total_comments,
+        'popular_posts': popular_posts,
+        'recent_posts': recent_posts,
+        'all_tags': all_tags,
+        'sidebar_categories': sidebar_categories,
     })
 
 def post_detail(request, slug):
@@ -165,6 +177,9 @@ def author_profile(request, username):
         'author': author,
         'posts': posts,
     })
+
+def about(request):
+    return render(request, 'blog/about.html')
 
 
     

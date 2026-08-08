@@ -1,0 +1,106 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-7 offset-md-2">
+
+        <!-- Header -->
+        <div class="text-center py-5 mb-4" style="border-bottom: 1px solid #e0d5c5;">
+            <p style="font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; color: #9a7e6a;">About</p>
+            <h1 style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 3rem; color: #3d2b1f;">Brewedwords</h1>
+            <span style="color: #c4a882; font-size: 1.2rem; letter-spacing: 8px;">— ✦ —</span>
+        </div>
+
+        <!-- What is Brewedwords -->
+        <div class="card p-4 mb-4">
+            <div class="card-body">
+                <h4 class="mb-3">What is Brewedwords?</h4>
+                <p style="line-height: 1.9; color: #6a5040;">
+                    Brewedwords is a quiet corner of the internet — a space where writers, thinkers, and curious minds come together to share stories, ideas, and reflections. Just like a good cup of coffee, every post here is brewed with thought, creativity, and intention.
+                </p>
+                <p style="line-height: 1.9; color: #6a5040;">
+                    Whether you're here to read, to write, or simply to explore — you're welcome here. This is a place for words that matter, stories worth telling, and ideas worth sharing.
+                </p>
+            </div>
+        </div>
+
+        <!-- What we believe -->
+        <div class="card p-4 mb-4">
+            <div class="card-body">
+                <h4 class="mb-3">What We Believe</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div style="padding: 16px; background-color: #f5efe6; border-radius: 10px;">
+                            <p style="font-size: 1.5rem; margin-bottom: 8px;">✍️</p>
+                            <h6 style="color: #7a4f35;">Everyone has a story</h6>
+                            <p style="font-size: 0.85rem; color: #9a7e6a; margin: 0;">Every person carries experiences worth writing about. We believe in giving everyone a voice.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div style="padding: 16px; background-color: #f5efe6; border-radius: 10px;">
+                            <p style="font-size: 1.5rem; margin-bottom: 8px;">☕</p>
+                            <h6 style="color: #7a4f35;">Quality over quantity</h6>
+                            <p style="font-size: 0.85rem; color: #9a7e6a; margin: 0;">We value thoughtful, intentional writing over endless content. Take your time. Write with care.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div style="padding: 16px; background-color: #f5efe6; border-radius: 10px;">
+                            <p style="font-size: 1.5rem; margin-bottom: 8px;">🌿</p>
+                            <h6 style="color: #7a4f35;">A calm space</h6>
+                            <p style="font-size: 0.85rem; color: #9a7e6a; margin: 0;">No noise, no clutter. Just clean, minimal reading and writing — the way it should be.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div style="padding: 16px; background-color: #f5efe6; border-radius: 10px;">
+                            <p style="font-size: 1.5rem; margin-bottom: 8px;">🤝</p>
+                            <h6 style="color: #7a4f35;">Community first</h6>
+                            <p style="font-size: 0.85rem; color: #9a7e6a; margin: 0;">Brewedwords is built around its writers and readers. Your words shape this space as much as ours do.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How it works -->
+        <div class="card p-4 mb-4">
+            <div class="card-body">
+                <h4 class="mb-3">How It Works</h4>
+                <div class="d-flex mb-3 align-items-start">
+                    <div style="min-width: 36px; height: 36px; background-color: #c4a882; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: bold; margin-right: 16px;">1</div>
+                    <div>
+                        <h6 style="color: #7a4f35; margin-bottom: 4px;">Create an account</h6>
+                        <p style="font-size: 0.85rem; color: #9a7e6a; margin: 0;">Sign up for free and become part of the Brewedwords community in seconds.</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-3 align-items-start">
+                    <div style="min-width: 36px; height: 36px; background-color: #c4a882; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: bold; margin-right: 16px;">2</div>
+                    <div>
+                        <h6 style="color: #7a4f35; margin-bottom: 4px;">Write your story</h6>
+                        <p style="font-size: 0.85rem; color: #9a7e6a; margin: 0;">Create posts, add categories and tags, upload images, and share your ideas with the world.</p>
+                    </div>
+                </div>
+                <div class="d-flex mb-3 align-items-start">
+                    <div style="min-width: 36px; height: 36px; background-color: #c4a882; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: bold; margin-right: 16px;">3</div>
+                    <div>
+                        <h6 style="color: #7a4f35; margin-bottom: 4px;">Connect and engage</h6>
+                        <p style="font-size: 0.85rem; color: #9a7e6a; margin: 0;">Like posts, leave comments, and discover writers who inspire you.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center py-4 mb-4" style="border-top: 1px solid #e0d5c5;">
+            {% if not request.user.is_authenticated %}
+                <h5 style="color: #7a4f35; margin-bottom: 16px;">Ready to start writing?</h5>
+                <a href="{% url 'register' %}" class="btn btn-primary me-2">Join Brewedwords</a>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Read Posts</a>
+            {% else %}
+                <h5 style="color: #7a4f35; margin-bottom: 16px;">Ready to write something?</h5>
+                <a href="{% url 'post_create' %}" class="btn btn-primary">+ Write a Post</a>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
