@@ -1,0 +1,30 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h3 class="mb-4">All Categories</h3>
+        <div class="row">
+            {% for item in category_data %}
+                <div class="col-md-4 mb-3">
+                    <a href="{% url 'category_detail' item.category.slug %}" style="text-decoration: none;">
+                        <div class="card p-3 text-center h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ item.category.name }}</h5>
+                                <p class="text-muted mb-1">
+                                    <small>{{ item.count }} post{{ item.count|pluralize }}</small>
+                                </p>
+                                {% if item.category.description %}
+                                    <p class="card-text" style="font-size: 0.85rem; color: #9a7e6a;">{{ item.category.description }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <p class="text-muted">No categories yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

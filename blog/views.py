@@ -1,5 +1,5 @@
 from django.shortcuts import render , get_object_or_404, redirect
-from .models import Post, Comment
+from .models import Post, Comment, Category
 from django.contrib.auth import login , logout , authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegisterForm 
@@ -8,11 +8,13 @@ from .forms import RegisterForm , PostForm , CommentForm
 from django.db.models import Q
 
 def home(request):
-    posts = Post.objects.filter(is_published=True).order_by('-created_at')
+    posts = Post.objects.filter(status='published').order_by('-created_at')
     return render(request, 'blog/home.html', {'posts': posts})
 
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+def post_detail(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    post.views += 1
+    post.save()
     comments = post.comments.all().order_by('-created_at')
 
     if request.method == 'POST':
@@ -24,7 +26,7 @@ def post_detail(request, pk):
             comment.post = post
             comment.author = request.user
             comment.save()
-            return redirect('post_detail', pk=pk)
+            return redirect('post_detail', slug=post.slug)
     else:
         form = CommentForm()
     
@@ -63,33 +65,33 @@ def user_logout(request):
 @login_required
 def post_create(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect('home')
+            return redirect('post_detail', slug=post.slug)
     else:
         form = PostForm()
     return render(request, 'blog/post_form.html', {'form': form, 'title': 'Create Post'})
 
 @login_required
-def post_edit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+def post_edit(request, slug):
+    post = get_object_or_404(Post, slug=slug)
     if request.user != post.author:
         return redirect('home')
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('post_detail', pk=pk)
+            return redirect('post_detail', slug=post.slug)
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_form.html', {'form': form, 'title': 'Edit Post'})
 
 @login_required
-def post_delete(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+def post_delete(request, slug):
+    post = get_object_or_404(Post, slug=slug)
     if request.user != post.author:
         return redirect('home')
     if request.method == 'POST':
@@ -110,18 +112,18 @@ def search(request):
     query = request.GET.get('q', '')
     posts = Post.objects.filter(
         Q(title__icontains=query) | Q(content__icontains=query),
-        is_published=True
+        status='published'
     ).order_by('-created_at') if query else []
     return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
 
 @login_required
-def post_like(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+def post_like(request, slug):
+    post = get_object_or_404(Post, slug=slug)
     if request.user in post.likes.all():
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-    return redirect('post_detail', pk=pk)
+    return redirect('post_detail', slug=post.slug)
 
 @login_required
 def dashboard(request):
@@ -130,5 +132,28 @@ def dashboard(request):
         'user_posts': user_posts,
         
     })
+
+def categories_list(request):
+    categories = Category.objects.all()
+    category_data = []
+    for category in categories:
+        count = Post.objects.filter(category=category, status='published').count()
+        category_data.append({'category': category, 'count': count})
+    return render(request, 'blog/categories.html', {'category_data': category_data})
+
+def category_detail(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    posts = Post.objects.filter(category=category, status='published').order_by('-created_at')
+    return render(request, 'blog/category_detail.html', {'category': category, 'posts': posts})
+
+def author_profile(request, username):
+    from django.contrib.auth.models import User
+    author = get_object_or_404(User, username=username)
+    posts = Post.objects.filter(author=author, status='published').order_by('-created_at')
+    return render(request, 'blog/author_profile.html', {
+        'author': author,
+        'posts': posts,
+    })
+
 
     
